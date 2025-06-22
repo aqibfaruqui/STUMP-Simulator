@@ -1,0 +1,54 @@
+Rust 1.87.0
+(Installed with curl https://sh.rustup/rs -sSf | sh)
+
+------------- STUMP CPU Architecture -------------
+
+    8 Registers
+    - R0 Always 0
+    - R1-R6 General Purpose
+    - R7 Program Counter
+
+    ARM status flags (never updated by LD/ST)
+    - N: if ALU result is (N)egative
+    - Z: if ALU result is (Z)ero
+    - V: if ALU result has o(V)erflow
+    - C: if ALU result has (C)arry from MSB
+
+    16-bit instructions & 16-bit memory width (0x0000 -> 0xFFFF)
+    - Type 1: Operand 1: Register  Operand 2: Register
+    - Type 2: Operand 1: Register  Operand 2: 5-bit Immediate
+    - Type 3: Conditional Branch 
+
+
+
+------------- STUMP Instruction Set -------------
+
+    Instruction Type (Bits 15-13) ++ (Appending 'S' sets Bit 12)
+    0 0 0: ADD 
+    0 0 1: ADC
+    0 1 0: SUB
+    0 1 1: SBC
+    1 0 0: AND
+    1 0 1: OR
+    1 1 0: LD/ST
+    1 1 1: BCC (only type 3 instruction - special case)
+
+    Type 1 or Type 2 (Bit 12)
+    0: Type 1
+    1: Type 2
+
+    ST/CC (Bit 11)
+    LD/ST:  0: LD
+            1: ST
+    Else:   0: Don't update Condition Code Register (NZCV)
+            1: Update Condition Code Register (NZCV)
+        
+    Destination (Bits 10-8)
+
+    Source A (Bits 7-5)
+
+    Type 1 Source B (Bits 4-2) ++ (Type 1 shift Bits 1-0)
+    Type 2 Source B (Bits 4-0) ++ (Sign extended?)
+    
+    Type 3 Condition (Bits 11-8)
+    Type 3 Offset from PC (Bits 7-0) ++ (Sign extended?)
