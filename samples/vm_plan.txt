@@ -19,6 +19,10 @@ Rust 1.87.0
     - Type 2: Operand 1: Register  Operand 2: 5-bit Immediate
     - Type 3: Conditional Branch 
 
+    3 cycles
+    - Fetch
+    - Execute
+    - Memory (only for LD/ST instructions)
 
 
 ------------- STUMP Instruction Set -------------
