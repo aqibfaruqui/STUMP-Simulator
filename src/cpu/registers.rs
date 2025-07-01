@@ -1,13 +1,13 @@
 pub struct StatusFlags {
-    pub n: bool,
-    pub z: bool,
-    pub v: bool,
-    pub c: bool,
+    pub n: bool,                // (N)egative
+    pub z: bool,                // (Z)ero
+    pub v: bool,                // o(V)erflow
+    pub c: bool,                // (C)arry
 }
 
-pub struct Registers {
-    regs: [u16; 8]
-}
+pub struct Registers {          // R0    => Always 0
+    regs: [u16; 8]              // R1-R6 => General Use
+}                               // R7    => PC
 
 impl Registers {
     pub fn new() -> Self {
