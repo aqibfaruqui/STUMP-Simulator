@@ -26,7 +26,7 @@ impl Registers {
         self.regs[7]
     }
 
-    pub fn incrememnt_pc(&mut self) {
+    pub fn increment_pc(&mut self) {
         self.regs[7] += 1;
     }
 
