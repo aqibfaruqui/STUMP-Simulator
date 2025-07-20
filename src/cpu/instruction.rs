@@ -33,49 +33,49 @@ pub enum BranchCondition {
 }
 
 pub struct Type1 {
-    op: AluOp,
-    update_flags: bool,
-    st_cc: bool,
-    dest: u8,
-    reg_a: u8,
-    reg_b: u8,
-    shift: u8,
+    pub op: AluOp,
+    pub update_flags: bool,
+    pub st_cc: bool,
+    pub dest: u8,
+    pub reg_a: u8,
+    pub reg_b: u8,
+    pub shift: u8,
 }
 
 pub struct Type2 {
-    op: AluOp,
-    update_flags: bool,
-    st_cc: bool,
-    dest: u8,
-    reg_a: u8,
-    immed: u8,
+    pub op: AluOp,
+    pub update_flags: bool,
+    pub st_cc: bool,
+    pub dest: u8,
+    pub reg_a: u8,
+    pub immed: u8,
 }
 
 pub struct Type3 {
-    cond: u8,
-    offset: u8,
+    pub cond: u8,
+    pub offset: u8,
 }
 
-pub enum Instrucion {
+pub enum Instruction {
     Type1(Type1),
     Type2(Type2),
     Type3(Type3),
 }
 
-pub fn decode(instr: u16) -> Instrucion {
-    let op_bits = instr.bits(15, 13) as u8;
+pub fn decode(instr: u16) -> Instruction {
+    let op_bits = instr.bits(13..15) as u8;
     
     if op_bits == 7 {
-        return Instrucion::Type3(Type3 {
-            cond: instr.bits(11, 8) as u8;
-            offset: instr.bits(7, 0) as u8;
+        return Instruction::Type3(Type3 {
+            cond: instr.bits(8..11) as u8,
+            offset: instr.bits(0..7) as u8,
         })
     }
 
     let is_type2 = instr.bit(12);
     let st_cc = instr.bit(11);
-    let dest = instr.bits(10, 8) as u8;
-    let reg_a = instr.bits(7, 5) as u8;
+    let dest = instr.bits(8..10) as u8;
+    let reg_a = instr.bits(5..7) as u8;
     let op  = match op_bits {
         0 => AluOp::Add,
         1 => AluOp::Adc,
@@ -90,27 +90,27 @@ pub fn decode(instr: u16) -> Instrucion {
     let update_flags = if op == AluOp::LdSt {
         false
     } else {
-        st_cc;
-    }
+        st_cc
+    };
     
     if is_type2 {
-        return Instrucion::Type2(Type2 {
+        return Instruction::Type2(Type2 {
             op,
             update_flags,
             st_cc,
             dest,
             reg_a,
-            immed: instr.bits(4, 0) as u8,
+            immed: instr.bits(0..4) as u8,
         })
     } else {
-        return Instrucion::Type1(Type1 {
+        return Instruction::Type1(Type1 {
             op,
             update_flags,
             st_cc,
             dest,
             reg_a,
-            reg_b: instr.bits(4, 2) as u8,
-            shift: instr.bits(1, 0) as u8,
+            reg_b: instr.bits(2..4) as u8,
+            shift: instr.bits(0..1) as u8,
         })
     }
 }

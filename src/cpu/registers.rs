@@ -1,3 +1,4 @@
+#[derive(Default)]
 pub struct StatusFlags {
     pub n: bool,                // (N)egative
     pub z: bool,                // (Z)ero
